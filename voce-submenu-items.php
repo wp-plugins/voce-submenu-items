@@ -3,7 +3,7 @@
   Plugin Name: Voce Submenu Nav Menu Items
   Plugin URI: http://voceconnect.com
   Description: Avoid giant Nav Menus by aggregating multiple "submenus" into a single Menu.
-  Version: 1.0
+  Version: 1.1
   Author: Jeff Stieler
   License: GPL2
 */
@@ -79,6 +79,13 @@ class Voce_Submenu_Nav_Menu_Items {
 			if ( ( 'taxonomy' === $menu_item->type ) &&
 				 ( 'nav_menu' === $menu_item->object ) &&
 				 ( $submenu_items = wp_get_nav_menu_items( $menu_item->object_id ) ) ) {
+
+				// If item has a parent, Give the ID to all items being spliced
+				if ( $parent_id = $menu_item->menu_item_parent ) {
+					foreach ( $submenu_items as $item ) {
+						$item->menu_item_parent = $parent_id;
+					}
+				}
 
 				array_splice( $sorted_menu_items, ( $i - 1 ), 1, $submenu_items );
 
